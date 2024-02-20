@@ -15,6 +15,12 @@
  */
 package org.mybatis.scala.mapping
 
+import scala.reflect.Manifest
+
+//import com.sun.org.apache.xalan.internal.utils.XMLSecurityPropertyManager.Property
+
+import javax.naming.Binding
+
 sealed class ParamModeEnum(v : String) {
   override def toString : String = v
 }
@@ -101,10 +107,14 @@ object Binding {
 
   /** Utility class for simplified syntax support */
   implicit class Param(property : String) {
-    def ? = Binding ? (property)
+    def ? = Binding.?[String](property)
   }
+
+
 
   /** Implicit conversion for simplified syntax support */
   //implicit def StringToParam(s : String) = new Param(s)
 
 }
+
+

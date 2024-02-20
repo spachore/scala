@@ -34,9 +34,9 @@ private[scala] class DynamicSQLBuilder(val configuration : MBConfig, val node : 
         new TextSqlNode(text)
       case PCData(text) =>
         new TextSqlNode(text)
-      case <xsql>{children @ _*}</xsql> =>
+      case <xsql>{children @ _}</xsql> =>
         parseChildren(children)
-      case trim @ <trim>{children @ _*}</trim> =>
+      case trim @ <trim>{children @ _}</trim> =>
         val content = parseChildren(children)
         new TrimSqlNode(
           configuration,
@@ -46,13 +46,13 @@ private[scala] class DynamicSQLBuilder(val configuration : MBConfig, val node : 
           attr(trim, "@suffix"),
           attr(trim, "@suffixOverrides")
         )
-      case <where>{children @ _*}</where> =>
+      case <where>{children @ _}</where> =>
         val content = parseChildren(children)
         new WhereSqlNode(configuration, content)
-      case <set>{children @ _*}</set> =>
+      case <set>{children @ _}</set> =>
         val content = parseChildren(children)
         new SetSqlNode(configuration, content)
-      case foreach @ <foreach>{children @ _*}</foreach> =>
+      case foreach @ <foreach>{children @ _}</foreach> =>
         val content = parseChildren(children)
         new ForEachSqlNode(
           configuration,
@@ -63,19 +63,19 @@ private[scala] class DynamicSQLBuilder(val configuration : MBConfig, val node : 
           attr(foreach, "@open"),
           attr(foreach, "@close"),
           attr(foreach, "@separator"))
-      case ifNode @ <if>{children @ _*}</if> =>
+      case ifNode @ <if>{children @ _}</if> =>
         val content = parseChildren(children)
         new IfSqlNode(content, attr(ifNode, "@test"))
-      case <choose>{children @ _*}</choose> =>
+      case <choose>{children @ _}</choose> =>
         val ifNodes = new ArrayList[SqlNode]
         var defaultNode : MixedSqlNode = null
         for (child <- children) {
           child match {
-            case when @ <when>{ch @ _*}</when> => {
+            case when @ <when>{ch @ _}</when> => {
               val content = parseChildren(ch)
               ifNodes add new IfSqlNode(content, attr(when, "@test"))
             }
-            case other @ <otherwise>{ch @ _*}</otherwise> =>
+            case other @ <otherwise>{ch @ _}</otherwise> =>
               if (defaultNode == null)
                 defaultNode = parseChildren(ch)
               else
@@ -85,10 +85,10 @@ private[scala] class DynamicSQLBuilder(val configuration : MBConfig, val node : 
           }
         }
         new ChooseSqlNode(ifNodes, defaultNode)
-      case ifNode @ <when>{children @ _*}</when> =>
+      case ifNode @ <when>{children @ _}</when> =>
         val content = parseChildren(children)
         new IfSqlNode(content, attr(ifNode, "@test"))
-      case other @ <otherwise>{children @ _*}</otherwise> =>
+      case other @ <otherwise>{children @ _}</otherwise> =>
         parseChildren(other)
       case a : Atom[_] =>
         new TextSqlNode(a.data.asInstanceOf[String])

@@ -21,11 +21,11 @@
 
   <parent>
     <groupId>org.mybatis.scala</groupId>
-    <artifactId>mybatis-scala-parent_2.13</artifactId>
-    <version>1.3.2-SNAPSHOT</version>
+    <artifactId>mybatis-scala-parent_3</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>mybatis-scala-samples_2.13</artifactId>
+  <artifactId>mybatis-scala-samples_3</artifactId>
   <packaging>jar</packaging>
   <name>mybatis-scala-samples</name>
 
@@ -44,7 +44,7 @@
     </dependency>
     <dependency>
       <groupId>org.scala-lang</groupId>
-      <artifactId>scala-library</artifactId>
+      <artifactId>scala3-library_${scala.binary}</artifactId>
     </dependency>
     <dependency>
       <groupId>org.hsqldb</groupId>
