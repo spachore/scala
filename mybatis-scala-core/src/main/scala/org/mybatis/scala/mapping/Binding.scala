@@ -15,6 +15,8 @@
  */
 package org.mybatis.scala.mapping
 
+import scala.reflect.ClassTag
+
 sealed class ParamModeEnum(v : String) {
   override def toString : String = v
 }
@@ -75,7 +77,7 @@ object Binding {
   }
 
   /** Generates an inline parameter binding */
-  def ?[JavaType : Manifest] (
+  def ?[JavaType : ClassTag](
     property : String,
     jdbcType : JdbcType = null,
     jdbcTypeName : String = null,
@@ -83,7 +85,7 @@ object Binding {
     mode : ParamModeEnum = ModeIN,
     typeHandler : T[_ <: TypeHandler[_]] = null,
     resultMap : ResultMap[_] = null
-  ) : String = {
+  )(implicit ct: ClassTag[JavaType]) : String = {
     Seq[Option[String]](
       Some(property)
       ,if (jdbcType != null) Some("jdbcType=" + jdbcType.toString) else None
@@ -93,7 +95,7 @@ object Binding {
       ,if (typeHandler != null) Some("typeHandler=" + typeHandler.unwrap.getName) else None
       ,if (resultMap != null) Some("resultMap=" + resultMap.fqi.id) else None
       ,{
-        val t = manifest[JavaType].runtimeClass
+        val t = ct.runtimeClass.asInstanceOf[Class[JavaType]]
         if (t != classOf[Nothing]) Some("javaType=" + translate(t)) else None
       }
       ) filter {_ match {case Some(x) => true; case None => false }} map {_.get} mkString("#{", ",", "}")
@@ -101,7 +103,7 @@ object Binding {
 
   /** Utility class for simplified syntax support */
   implicit class Param(property : String) {
-    def ? = Binding ? (property)
+    def ? = Binding.?[String](property)
   }
 
   /** Implicit conversion for simplified syntax support */

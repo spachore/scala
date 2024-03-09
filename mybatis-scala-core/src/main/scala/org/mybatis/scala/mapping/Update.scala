@@ -17,16 +17,18 @@ package org.mybatis.scala.mapping
 
 import org.mybatis.scala.session.Session
 
+import scala.reflect.ClassTag
+
 /** A mapped SQL UPDATE statement.
   * Basically this defines a function: (Param => Int)
   * @tparam Param Input parameter type of the apply method.
   * @version \$Revision$
   */
-abstract class Update[Param : Manifest]
+abstract class Update[Param : ClassTag](implicit val ct: ClassTag[Param])
   extends Statement
   with SQLFunction1[Param,Int] {
 
-  def parameterTypeClass = manifest[Param].runtimeClass
+  def parameterTypeClass = ct.runtimeClass
 
   /** Exceutes the SQL UPDATE Statement
     * @param param Input paramenter of the statement

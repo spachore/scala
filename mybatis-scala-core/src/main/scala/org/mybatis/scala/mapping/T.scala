@@ -15,17 +15,20 @@
  */
 package org.mybatis.scala.mapping
 
+import scala.reflect.ClassTag
+
 /** Utility to wrap types with reflection capabilities via Manifest.
   * Use T[MyType] instead of classOf[MyType]
-  * @tparam t wrapped type
+ *
+ * @tparam t wrapped type
   */
-class T[t : Manifest] {
-  val raw = manifest[t].runtimeClass.asInstanceOf[Class[Any]]
-  val unwrap = manifest[t].runtimeClass.asInstanceOf[Class[t]]
+class T[t: ClassTag](implicit val ct: ClassTag[t]) {
+  val raw: Class[Any] = ct.runtimeClass.asInstanceOf[Class[Any]]
+  val unwrap: Class[t] = ct.runtimeClass.asInstanceOf[Class[t]]
   val isVoid = unwrap == java.lang.Void.TYPE
 }
 
 /** Syntactic sugar to support "T[MyType]" instead of new T[MyType] */
 object T {
-  def apply[t : Manifest] = new T[t]
+  def apply[t](implicit ct: ClassTag[t]) = new T[t]
 }
