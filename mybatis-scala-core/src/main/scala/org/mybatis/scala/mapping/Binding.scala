@@ -106,7 +106,11 @@ object Binding {
     def ? = Binding.?[String](property)
   }
 
+
+
   /** Implicit conversion for simplified syntax support */
   //implicit def StringToParam(s : String) = new Param(s)
 
 }
+
+

@@ -66,8 +66,8 @@ object ItemDAO {
         INSERT INTO item(description_, info_, year_)
         VALUES (
           { "description"? },
-          {? ("info", jdbcType=JdbcType.VARCHAR)},
-          {? ("year", jdbcType=JdbcType.INTEGER)}
+          {?[String] ("info", jdbcType=JdbcType.VARCHAR)},
+          {?[Int] ("year", jdbcType=JdbcType.INTEGER)}
         )
       </xsql>
   }
@@ -78,8 +78,8 @@ object ItemDAO {
         UPDATE item
         SET
           description_ = {"description"?},
-          info_ = {? ("info", jdbcType=JdbcType.VARCHAR)},
-          year_ = {? ("year", jdbcType=JdbcType.INTEGER)}
+          info_ = {?[String] ("info", jdbcType=JdbcType.VARCHAR)},
+          year_ = {?[Int] ("year", jdbcType=JdbcType.INTEGER)}
         WHERE id_ = {"id"?}
       </xsql>
   }
