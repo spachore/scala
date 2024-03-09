@@ -24,8 +24,7 @@ import java.util.ArrayList
 import org.apache.ibatis.mapping.{ResultMapping => MBResultMapping, SqlSource, SqlCommandType, Discriminator}
 import java.util.Properties
 //eliminate a feature warning, might be a good idea to define and use traits instead of using structural types
-import scala.language.reflectiveCalls
-//import scala.reflect.Selectable.reflectiveSelectable
+import scala.reflect.Selectable.reflectiveSelectable
 
 /** Configuration Space (mybatis namespace)
   * @constructor Creates an empty configuration space.
